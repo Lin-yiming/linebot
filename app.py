@@ -43,6 +43,10 @@ def callback():
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
+    # 如果 body 中的 events 為空，返回 200 狀態碼
+    if body and 'events' in body and len(eval(body)['events']) == 0:
+        return 'OK', 200
+
     # 處理 webhook 請求
     try:
         handler.handle(body, signature)
