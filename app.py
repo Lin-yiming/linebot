@@ -24,9 +24,9 @@ import pytz
 app = Flask(__name__)
 
 # 必須放上自己的 Channel Access Token
-line_bot_api = LineBotApi('6Mux3gHBehpFUIg8DruP0+DpoXKQ2Lzwz0jt+OavFtBtn4Py63dI96z0IIKP3KTV/uLu+2sKGEyruYYnn/aG5zYv6aiLkTWQ3KIJ96ypEG/dwnj2Yrdw9mt+3aImofyITcdZtD/QPI0lhhjpcZlxQQdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('sLqfuHAML8w7edfahcrCXiqhvh8DKPm29T6DXobKZAAsFnc9KX4OsdxIImyMlTUPGmq4uZ+73nWnGa0vfIRRM+TgxK53OIkI+I0Bt7E4CaCuBy8oYwtzKvUet56jW5oF/6H7jCgEWFoJZAatfEp/OAdB04t89/1O/w1cDnyilFU=')
 # 必須放上自己的 Channel Secret
-handler = WebhookHandler('3237ed691fa046813aedd176f227e36b')
+handler = WebhookHandler('ac1c39cba994874c70d504130e80e92e')
 
 line_bot_api.push_message('Uae4d95a8996273cbd5fd013544cb3d5a', TextSendMessage(text='你可以開始了'))
 
@@ -75,13 +75,6 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, response)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
-
-# 定義整點提醒功能
-def hourly_reminder():
-    now = datetime.now(taipei_tz).strftime("%Y-%m-%d %H:%M:%S")
-    message = f"現在時間是 {now}，整點提醒！"
-    # 替換為實際的用戶 ID
-    line_bot_api.push_message('Uae4d95a8996273cbd5fd013544cb3d5a', TextSendMessage(text=message))
 
 # 設定定時任務
 scheduler = BackgroundScheduler()
