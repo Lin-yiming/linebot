@@ -9,5 +9,3 @@ emoji
 pyshorteners
 scipy
 yfinance
-BackgroundScheduler
-DateTrigger
