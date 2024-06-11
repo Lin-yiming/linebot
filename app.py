@@ -76,6 +76,13 @@ def handle_message(event):
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
 
+# 定義整點提醒功能
+def hourly_reminder():
+    now = datetime.now(taipei_tz).strftime("%Y-%m-%d %H:%M:%S")
+    message = f"現在時間是 {now}，整點提醒！"
+    # 替換為實際的用戶 ID
+    line_bot_api.push_message('Uae4d95a8996273cbd5fd013544cb3d5a', TextSendMessage(text=message))
+
 # 設定定時任務
 scheduler = BackgroundScheduler()
 scheduler.add_job(hourly_reminder, 'cron', minute=0, timezone=taipei_tz)
