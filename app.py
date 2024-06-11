@@ -9,7 +9,7 @@ Line Bot聊天機器人
 第三章 互動回傳功能
 推播push_message與回覆reply_message
 """
-# 載入LineBot所需要的套件
+#載入LineBot所需要的套件
 from flask import Flask, request, abort
 
 from linebot import (
@@ -19,9 +19,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import *
-import os
-import json
-
+import re
 app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
@@ -34,22 +32,14 @@ line_bot_api.push_message('Uae4d95a8996273cbd5fd013544cb3d5a', TextSendMessage(t
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
 def callback():
-    # 取得 X-Line-Signature 標頭值
+    # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
-    # 將請求內容作為文本獲取
+    # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    # 檢查是否為確認通信請求
-    try:
-        json_data = json.loads(body)
-        if 'events' in json_data and not json_data['events']:
-            return 'OK', 200
-    except json.JSONDecodeError:
-        pass
-
-    # 處理 webhook 請求
+    # handle webhook body
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
@@ -57,7 +47,17 @@ def callback():
 
     return 'OK'
 
-# 主程式
+#訊息傳遞區塊
+##### 基本上程式編輯都在這個function #####
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    message = event.message.text
+    if re.match('告訴我秘密',message):
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('才不告訴你哩！'))
+    else:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+#主程式
+import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
