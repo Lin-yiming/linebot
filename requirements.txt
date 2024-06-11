@@ -9,5 +9,5 @@ emoji
 pyshorteners
 scipy
 yfinance
-apscheduler
-schedulers
+BackgroundScheduler
+DateTrigger
