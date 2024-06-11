@@ -10,3 +10,4 @@ pyshorteners
 scipy
 yfinance
 apscheduler
+schedulers
